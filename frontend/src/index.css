@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+@layer base {
+  /* ── Webkit (Chrome, Safari, Edge, Opera) ── */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  /* Track — matches your light gray background */
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  /* Thumb — hidden by default via transparent color */
+  ::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 9999px;
+    transition: background 0.2s ease;
+  }
+
+  /* Reveal thumb when the container is hovered */
+  *:hover::-webkit-scrollbar-thumb {
+    background: #1a5a8a33; /* your brand blue at ~20% opacity */
+  }
+
+  /* Brighter on direct thumb hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #1a5a8a66 !important; /* ~40% opacity */
+  }
+
+  /* Corner where scrollbars meet */
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  /* ── Firefox ── */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+  }
+
+  *:hover {
+    scrollbar-color: #1a5a8a33 transparent;
+  }
+}
+@keyframes marquee {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+.animate-marquee {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marquee 25s linear infinite;
+}

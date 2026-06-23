@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/catalog/:id",
+      "destination": "/api/catalog?id=$id"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
