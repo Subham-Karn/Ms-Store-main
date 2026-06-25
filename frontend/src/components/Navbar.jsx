@@ -252,12 +252,10 @@ const Navbar = () => {
           >
             <Menu size={24} />
           </button>
-
           {/* Logo */}
           <Link to="/" className="flex items-center h-10 w-28 md:w-32 overflow-hidden rounded shrink-0">
-            <img src="/logo.png.jpeg" alt="MS Store" />
+            <img src="/logo.jpg" alt="MS Store" />
           </Link>
-
           {/* Desktop navlinks */}
           <ul className="hidden md:flex items-center gap-6 text-sm font-medium text-[#1a5a8a]">
             {navlinks.map((item, i) => (
