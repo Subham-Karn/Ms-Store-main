@@ -4,37 +4,21 @@ import ProductCard from "../components/ProductCard";
 import RootLayout from "../util/RootLayout";
 import { fetchCatalogs } from "../store/slices/appSlice";
 import toast from "react-hot-toast";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const SearchResults = () => {
-  const { catalogs} = useSelector(state => state.app);
-  const [loading, setLoading] = useState(true);
-
+  const { catalogs , isLoading:loading} = useSelector(state => state.app);
+  const dispatch = useDispatch();
   const { search } = useLocation();
   const query = new URLSearchParams(search).get("q")?.trim() || "";
   const tag = new URLSearchParams(search).get("tag")?.trim() || "";
 
-  useEffect(() => {
-    document.title = `Ms Store | ${query || tag || "Search"}`;
-    
-    const fetch = async () => {
-      if (catalogs && catalogs.length > 0) {
-        setLoading(false);
-        return;
-      }
-      
-      setLoading(true);
-      try {
-        await dispatch(fetchCatalogs()).unwrap();
-      } catch (err) {
-        toast.error("Failed to fetch catalogs:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    fetch();
-  }, [setCatalogs, query, tag, catalogs.length]);
+
+  useEffect(()=>{
+     dispatch(fetchCatalogs())
+     document.title = `Ms Store | ${query || tag || "Search"}`;
+  },[dispatch ,query, tag])
+
 
   const searchResults = useMemo(() => {
     if (!query && !tag) return [];
