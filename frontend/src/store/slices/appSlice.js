@@ -153,13 +153,9 @@ export const fetchMenus = createAsyncThunk(
       if (res?.success === false) {
         throw new Error(res.message);
       }
-      console.log(res);
-      
       const menuData = res?.data || res || [];
       return Array.isArray(menuData) ? menuData : [];
     } catch (error) {
-      console.log(error);
-      
       return rejectWithValue(error.response.data.message);
     }
   }
