@@ -183,7 +183,8 @@ const Navbar = () => {
   }, [dispatch, menus]);
 
   const closeMenu = useCallback(() => setIsMenuOpen(false), []);
-
+  console.log(menus);
+  
   const handleLogout = async () => {
     try {
       setLogoutLoading(true);
@@ -202,7 +203,8 @@ const Navbar = () => {
   /* Split menus into visible + overflow */
   const visibleMenus = menus.slice(0, VISIBLE_MENU_LIMIT);
   const hasMore = menus.length > VISIBLE_MENU_LIMIT;
-
+  console.log(visibleMenus);
+  
   return (
     <>
       {/* ── Marquee keyframes ── */}
@@ -401,7 +403,6 @@ const Navbar = () => {
             <ul className="flex items-center gap-0.5 px-6 lg:px-12 py-0.5 flex-wrap">
               {/* "Menu" label */}
               
-
               {/* Visible menu items */}
               {visibleMenus.map((menu, i) => (
                 <li key={i} className="nav-menu-item relative group">
