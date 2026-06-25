@@ -47,7 +47,7 @@ const CatalogPage = () => {
       try {
         await dispatch(fetchCatalogs()).unwrap();
       } catch (err) {
-        toast.error("Error fetching catalogs: " + err.message);
+        console.error("Error fetching catalogs: " + err.message);
       } finally {
         setLoading(false);
       }
