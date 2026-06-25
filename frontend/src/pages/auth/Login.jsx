@@ -32,7 +32,7 @@ const Login = () => {
     try {
       setIsSubmitting(true);
       const res = await dispatch(loginUser(formData)).unwrap();
-      toast.success(res?.message || "Welcome Back")
+      toast.success(res.data?.message || "Welcome Back")
       navigate("/")
     } catch (err) {
       toast.error(err.error);
@@ -44,7 +44,7 @@ const Login = () => {
   const handleGoogleLogin = async () => {
      try {
        const response = await dispatch(googleOAuth()).unwrap();
-       toast.success(response?.message || "Welcome Back")
+       toast.success(response.data?.message || "Welcome Back")
        navigate("/")
      } catch (error) {
        toast.error(error.error);

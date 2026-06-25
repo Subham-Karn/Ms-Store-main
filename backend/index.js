@@ -39,12 +39,7 @@ app.use(morgan('dev'));
 
 const allowedOrigins = [
   process.env.CLIENT_URL,
-  "http://localhost:2000",
-  "http://localhost:2001",
-  "http://127.0.0.1:2000",
-  "http://127.0.0.1:2001",
-  "https://msstore.in",
-  "https://api.msstore.in"
+  process.env.SERVER_URL
 ];
 
 app.use(cors({

@@ -152,7 +152,7 @@ export const LoginUser = async (req, res, next) => {
     } catch (axiosError) {
       const firebaseErrorString = axiosError.response?.data?.error?.message || "AUTHENTICATION_FAILED";
       
-      if (firebaseErrorString === "INVALID_PASSWORD" || firebaseErrorString === "EMAIL_NOT_FOUND") {
+      if (["Identity Handshake Interrupted: INVALID_LOGIN_CREDENTIALS" , "EMAIL_NOT_FOUND"].includes(firebaseErrorString)){
         throw new ApiError(401, "Invalid Credentials: Your email or password combination is incorrect");
       }
       if (firebaseErrorString === "USER_DISABLED") {
