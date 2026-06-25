@@ -8,17 +8,12 @@ import { fetchCatalogs } from "../store/slices/appSlice";
 const Footerbar = () => {
   const { catalogs} = useSelector(state =>state.app);
   const dispatch = useDispatch();
+  
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        await dispatch(fetchCatalogs()).unwrap();
-      } catch (err) {
-         console.error(err.message)
-        toast.error("Error fetching catalogs:", err.message);
-      } 
-    };
-    fetchProducts();
-  }, [dispatch]);
+    if (!catalogs || catalogs.length === 0) {
+      dispatch(fetchCatalogs());
+    }
+  }, [dispatch, catalogs]);
 
   // Extract & flatten tags inside useMemo
   const uniqueTags = useMemo(() => {

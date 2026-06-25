@@ -6,7 +6,7 @@ const Bunnerbar = () => {
     <div
       className="relative mt-6 w-full h-[500px] sm:h-[650px] md:h-7550px] lg:h-[600px] rounded-xl overflow-hidden shadow-xl"
       style={{
-        backgroundImage: `url("/banner.jpg.png")`,
+        backgroundImage: `url("/banner.jpg")`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
