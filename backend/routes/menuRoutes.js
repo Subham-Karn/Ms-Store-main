@@ -12,7 +12,7 @@ const router = Router();
 
 // Menu (Parent) Routes
 router.post("/", createMenu);
-router.get("/combined", getAllMenusWithSubMenu); 
+router.get("/combined" , getAllMenusWithSubMenu); 
 router.delete("/:id", deleteMenu);
 
 // Submenu (Child) Routes

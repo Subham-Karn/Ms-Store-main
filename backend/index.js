@@ -57,6 +57,16 @@ app.use(cors({
     allowedHeaders: ["Content-Type","Authorization"]
 }));
 
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+};
+
 
 app.use(express.json());
 
@@ -65,7 +75,7 @@ app.use('/api/v1/products', productsRoutes);
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/categories', categoriesRoutes);
 app.use('/api/v1/comments', commentsRoutes);
-app.use('/api/v1/menu', menuRoutes);
+app.use('/api/v1/menu', cors(corsOptions), menuRoutes);
 app.use('/api/v1/address', addressRoutes);
 app.use('/api/v1/orders', ordersRoutes);
 
