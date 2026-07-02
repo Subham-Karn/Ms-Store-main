@@ -3,6 +3,7 @@ import multer from "multer";
 import {
   addProducts,
   addBulkProducts,
+  bulkDeleteProducts,
   productsUpdate,
   deleteProduct,
   updateSKUID,
@@ -11,7 +12,7 @@ import {
   updateStock,
 } from "../controllers/ProductsControllers.js";
 import uploadImagesForProducts from "../middleware/uploadsImages.js";
-
+console.log("PRODUCT ROUTES LOADED");
 const router = Router();
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -44,6 +45,7 @@ router.put(
 );
 
 // DELETE /api/products/:id
+router.delete("/bulk-delete", bulkDeleteProducts);
 router.delete("/:id", deleteProduct);
 
 // PUT /api/products/update-sku/:id
