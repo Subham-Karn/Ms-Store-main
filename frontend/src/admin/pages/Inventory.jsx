@@ -17,8 +17,8 @@ import { deleteCatalog } from "../../services/catalogService";
 import { formatDate } from "../../util/formateDate";
 import { deleteProduct, fetchCatalogs } from "../../store/slices/appSlice";
 import CategoryManager from "../components/CategoryManager";
-import ProductManager from "../components/ProductManager";
-
+import BulkUploadManager from "../components/BulkUploadManager";
+import api from "../../axios/api";
 const PLACEHOLDER_IMG = "https://via.placeholder.com/56";
 
 const Inventory = () => {
@@ -39,7 +39,7 @@ const Inventory = () => {
   const [filtredCatalog, setFiltredCatalog] = useState(allCatalogs);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("All");
-
+const [selectedProducts, setSelectedProducts] = useState([]);
   // --- CSV Upload State ---
   const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
   const [csvFile, setCsvFile] = useState(null);
@@ -92,7 +92,52 @@ const handleDeleteCatalog = async (id) => {
     setSelectedCatalog(catalog);
     setIsDeleteModalOpen(true);
   };
+const handleSelectProduct = (pid) => {
+  setSelectedProducts((prev) =>
+    prev.includes(pid)
+      ? prev.filter((id) => id !== pid)
+      : [...prev, pid]
+  );
+};
 
+const handleSelectAll = () => {
+  if (selectedProducts.length === filtredCatalog.length) {
+    setSelectedProducts([]);
+  } else {
+    setSelectedProducts(
+      filtredCatalog.map((item) => item.pid)
+    );
+  }
+};
+const handleBulkDelete = async () => {
+  if (selectedProducts.length === 0) {
+    toast.error("Please select at least one product.");
+    return;
+  }
+
+  const confirmDelete = window.confirm(
+    `Delete ${selectedProducts.length} selected products?`
+  );
+
+  if (!confirmDelete) return;
+
+  try {
+    await api.delete("/products/bulk-delete", {
+      data: {
+        productIds: selectedProducts,
+      },
+    });
+
+    toast.success("Products deleted successfully.");
+
+    setSelectedProducts([]);
+
+    dispatch(fetchCatalogs());
+  } catch (err) {
+    console.error(err);
+    toast.error("Bulk delete failed.");
+  }
+};
   const handleCsvUpload = async (e) => {
     e.preventDefault();
     if (!csvFile) {
@@ -147,9 +192,14 @@ const handleDeleteCatalog = async (id) => {
     return <CategoryManager onClose={()=>setCategoryOpen(false)}/>
   }
 
-  if(isCsvModalOpen){
-    return <ProductManager onClose={()=>setIsCsvModalOpen(false)} user={user} />
-  }
+  if (isCsvModalOpen) {
+  return (
+    <BulkUploadManager
+      onClose={() => setIsCsvModalOpen(false)}
+      user={user}
+    />
+  );
+}
 
   return (
     <div className="flex flex-col items-start w-full min-h-screen relative">
@@ -212,6 +262,17 @@ const handleDeleteCatalog = async (id) => {
             Category Manager
           </button>
         </div>
+        {selectedProducts.length > 0 && (
+  <div className="w-full mb-4 flex justify-end">
+    <button
+      onClick={handleBulkDelete}
+      className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+    >
+      <Trash2 size={18} />
+      Delete Selected ({selectedProducts.length})
+    </button>
+  </div>
+)}
       </div>
 
       {/* Filters Area */}
@@ -281,7 +342,20 @@ const handleDeleteCatalog = async (id) => {
           <table className="min-w-full overflow-hidden text-sm">
             <thead className="bg-[#1a5a8a] text-white">
               <tr>
-                <th className="py-4 px-4 text-left font-semibold rounded-tl-lg">S.No.</th>
+                
+<th className="py-4 px-4 rounded-tl-lg">
+  <input
+    type="checkbox"
+    checked={
+      selectedProducts.length === filtredCatalog.length &&
+      filtredCatalog.length > 0
+    }
+    onChange={handleSelectAll}
+  />
+</th>
+                <th className="py-4 px-4 text-left font-semibold">
+  S.No.
+</th>
                 <th className="py-4 px-4 text-left font-semibold">Image</th>
                 <th className="py-4 px-4 text-left font-semibold">Product</th>
                 <th className="py-4 px-4 text-left font-semibold">SKU ID</th>
@@ -295,6 +369,13 @@ const handleDeleteCatalog = async (id) => {
             <tbody className="divide-y divide-gray-100">
               {filtredCatalog.map((catalog, index) => (
                 <tr key={catalog.pid || index} className="hover:bg-gray-50 transition-colors">
+                  <td className="py-3 px-4">
+  <input
+    type="checkbox"
+    checked={selectedProducts.includes(catalog.pid)}
+    onChange={() => handleSelectProduct(catalog.pid)}
+  />
+</td>
                   <td className="py-3 px-4 font-medium text-gray-500">{index + 1}</td>
                   <td className="py-3 px-4">
                     <img

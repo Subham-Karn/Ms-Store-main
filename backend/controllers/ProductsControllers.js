@@ -1,3 +1,4 @@
+console.log("PRODUCT CONTROLLER LOADED");
 import { db } from "../db/firebaseAdmin.js";
 import { ApiError } from "../util/ApiError.js";
 import { ApiResponse } from "../util/ApiResponse.js";
@@ -319,7 +320,38 @@ export const deleteProduct = async (req, res, next) => {
     next(error);
   }
 };
+export const bulkDeleteProducts = async (req, res, next) => {
+ console.log("===== BULK DELETE HIT =====");
+  console.log(req.body);
 
+ 
+  try {
+    const { productIds } = req.body;
+
+    if (!productIds || !Array.isArray(productIds) || productIds.length === 0) {
+      throw new ApiError(400, "No products selected");
+    }
+
+    const batch = db.batch();
+
+    productIds.forEach((id) => {
+      const docRef = db.collection("products").doc(id);
+      batch.delete(docRef);
+    });
+
+    await batch.commit();
+
+    return res.status(200).json(
+      new ApiResponse(
+        200,
+        { deleted: productIds.length },
+        `${productIds.length} products deleted successfully`
+      )
+    );
+  } catch (error) {
+    next(error);
+  }
+};
 export const updateSKUID = async (req, res, next) => {
   const { id } = req.params;
   const { skuId } = req.body;
