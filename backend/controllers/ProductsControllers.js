@@ -28,8 +28,6 @@ export const addProducts = async (req, res, next) => {
       : req.body.tags
     : [];
 
-  console.log("Bunner received in controller:", bunner);
-
   try {
     if (!userId) throw new ApiError(400, "User is not logged in");
 
@@ -220,7 +218,7 @@ export const getAllProducts = async (req, res, next) => {
 
     return res
       .status(200)
-      .json(new ApiResponse(200, products, "All items compiled successfully"));
+      .json(new ApiResponse(200,{products: products || []}, "All items compiled successfully"));
   } catch (error) {
     next(error);
   }
@@ -321,10 +319,6 @@ export const deleteProduct = async (req, res, next) => {
   }
 };
 export const bulkDeleteProducts = async (req, res, next) => {
- console.log("===== BULK DELETE HIT =====");
-  console.log(req.body);
-
- 
   try {
     const { productIds } = req.body;
 
@@ -345,7 +339,7 @@ export const bulkDeleteProducts = async (req, res, next) => {
       new ApiResponse(
         200,
         { deleted: productIds.length },
-        `${productIds.length} products deleted successfully`
+       `${productIds.length} products deleted successfully`
       )
     );
   } catch (error) {

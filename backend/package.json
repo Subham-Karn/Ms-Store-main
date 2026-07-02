@@ -25,6 +25,7 @@
     "helmet": "^8.2.0",
     "install": "^0.13.0",
     "jsonwebtoken": "^9.0.2",
+    "limiter": "^3.0.0",
     "morgan": "^1.11.0",
     "multer": "^2.0.2",
     "multer-storage-cloudinary": "^4.0.0",
